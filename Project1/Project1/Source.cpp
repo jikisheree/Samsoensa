@@ -11,7 +11,7 @@ int main()
 {
     srand(time(0));
 
-    RenderWindow app(VideoMode(400, 533), "Raise dumb!");
+    RenderWindow app(VideoMode(600, 853), "Raise dumb!");
     app.setFramerateLimit(60);
 
     Texture x1, x2, x3;
@@ -20,14 +20,14 @@ int main()
     x3.loadFromFile("images/cat.png");
 
     Sprite sBackground(x1), sPlat(x2), sChars(x3);
-    sBackground.setTextureRect(IntRect(0, 0, 400, 533));
+    sBackground.setTextureRect(IntRect(0, 0, 600, 853));
 
     point plat[20];
 
     for (int i = 0; i < 10; i++)
     {
-        plat[i].x = rand() % 400;
-        plat[i].y = rand() % 533;
+        plat[i].x = rand() % 600;
+        plat[i].y = rand() % 853;
     }
 
     int x = 100, y = 100, h = 200;
