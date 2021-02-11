@@ -15,7 +15,7 @@ int main()
     app.setFramerateLimit(60);
 
     Texture x1, x2, x3;
-    x1.loadFromFile("images/bg1.png");
+    x1.loadFromFile("images/bg1.jpg");
     x2.loadFromFile("images/platform.png");
     x3.loadFromFile("images/cat.png");
 
