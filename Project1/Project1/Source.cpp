@@ -109,16 +109,12 @@ int main()
  
             break;
         case GameOver:
-            while (app.isOpen())
-            {
-                sf::Event event;
+            sf::Event event;
                 while (app.pollEvent(event))
                 {
                     if (event.type == sf::Event::Closed)
                         app.close();
                 }
-
-            }
 
             break;
         default:
