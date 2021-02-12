@@ -81,22 +81,20 @@ int main()
 
             dy += 0.5;
             y += dy;
-            if (y > 800) dy = -20;
+            if (y > 853) currentState = GameOver;
 
             if (y < h)
                 for (int i = 0; i < 10; i++)
                 {
                     y = h;
                     plat[i].y = plat[i].y - dy;
-                    if (plat[i].y > 853) { plat[i].y = 0; plat[i].x = rand() % 500; }
+                    if (plat[i].y > 853) { plat[i].y = 0; plat[i].x = rand() % 300; }
                 }
 
             for (int i = 0; i < 10; i++)
-                if ((x + 100 > plat[i].x) && (x + 50 < plat[i].x + 100) &&
-                    (y + 120 > plat[i].y) && (y + 120 < plat[i].y + 30) && (dy > 0)) dy = -17;
+                if ((x + 100 > plat[i].x) && (x + 40 < plat[i].x + 140) &&
+                    (y + 140 > plat[i].y) && (y + 140 < plat[i].y + 40) && (dy > 0)) dy = -20;
             sChars.setPosition(x, y);
-
-            if (y < 250) currentState = GameOver;
 
             app.draw(sBackgroundGame);
             for (int i = 0; i < 10; i++)
@@ -109,13 +107,9 @@ int main()
  
             break;
         case GameOver:
-            sf::Event event;
-                while (app.pollEvent(event))
-                {
-                    if (event.type == sf::Event::Closed)
-                        app.close();
-                }
-
+            app.draw(sBackgroundMainMenu);
+            app.draw(sPlayButton);
+            app.draw(sQuitButton);
             break;
         default:
             break;
