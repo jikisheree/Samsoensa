@@ -71,6 +71,9 @@ int main()
                 if (Mouse::isButtonPressed(Mouse::Left))
                 {
                     currentState = Game;
+                    x = 100;
+                    y = 100;
+                    dy = 0;
                 }
             }
             if (sQuitButton.getGlobalBounds().contains(app.mapPixelToCoords(Mouse::getPosition(app))))
@@ -84,14 +87,13 @@ int main()
             app.draw(sBackgroundMainMenu);
             app.draw(sPlayButton);
             app.draw(sQuitButton);
-            x = 100;
-            y = 100;
+            
             break;
         case Game:
             // jump
             if (Keyboard::isKeyPressed(Keyboard::Right)) x += 3;
             if (Keyboard::isKeyPressed(Keyboard::Left)) x -= 3;
-
+            if (Keyboard::isKeyPressed(Keyboard::Escape)) currentState = MainMenu;
             dy += 0.5;
             y += dy;
             if (y > 853) currentState = GameOver;
@@ -146,7 +148,7 @@ int main()
                     app.close();
                 }
             }
-
+          
             app.draw(sBGgameover);
             app.draw(sgameover);
             app.draw(sNewGameButton);
