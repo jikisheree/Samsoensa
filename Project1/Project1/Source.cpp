@@ -40,7 +40,7 @@ int main()
 
     for (int i = 0; i < 8; i++)
     {
-        plat[i].x = rand() % 488;
+        plat[i].x = rand() % 600;
         plat[i].y = rand() % 1000;
     }
 
@@ -65,16 +65,18 @@ int main()
             sQuitButton.setPosition(92, 358);
             sPlayButton.setTexture(x5);
             sQuitButton.setTexture(x6);
-            if (Keyboard::isKeyPressed(Keyboard::Enter)) currentState = Game;
+            //playbutton
+            if (Keyboard::isKeyPressed(Keyboard::Enter))
+            {
+                sPlayButton.setTexture(x7);
+                currentState = Game;
+            }
             if (sPlayButton.getGlobalBounds().contains(app.mapPixelToCoords(Mouse::getPosition(app))))
             {
                 sPlayButton.setTexture(x7);
                 if (Mouse::isButtonPressed(Mouse::Left))
                 {
                     currentState = Game;
-                    x = 100;
-                    y = 100;
-                    dy = 0;
                 }
             }
             if (sQuitButton.getGlobalBounds().contains(app.mapPixelToCoords(Mouse::getPosition(app))))
@@ -92,11 +94,7 @@ int main()
             break;
         case Game:
             // jump
-            if (Keyboard::isKeyPressed(Keyboard::Right) or Keyboard::isKeyPressed(Keyboard::D)) {
-                x += 3;
-            
-            }
-
+            if (Keyboard::isKeyPressed(Keyboard::Right) or Keyboard::isKeyPressed(Keyboard::D)) x += 3;
             if (Keyboard::isKeyPressed(Keyboard::Left) or Keyboard::isKeyPressed(Keyboard::A)) x -= 3;
             if (Keyboard::isKeyPressed(Keyboard::Escape)) currentState = MainMenu;
             dy += 0.5;
@@ -124,8 +122,6 @@ int main()
                 app.draw(sPlat);
             }
             app.draw(sChars);
-
- 
             break;
         case GameOver:
             sgameover.setPosition(22, 78);
@@ -134,15 +130,22 @@ int main()
             sNewGameButton.setTexture(x11);
             sQuitGOButton.setTexture(x13);
 
-            if (sNewGameButton.getGlobalBounds().contains(app.mapPixelToCoords(Mouse::getPosition(app))))
+            //newgamebutton
+            if (sNewGameButton.getGlobalBounds().contains(app.mapPixelToCoords(Mouse::getPosition(app))) || Keyboard::isKeyPressed(Keyboard::Enter))
             {
                 sNewGameButton.setTexture(x12);
-                if (Mouse::isButtonPressed(Mouse::Left))
+                if (Mouse::isButtonPressed(Mouse::Left) || Keyboard::isKeyPressed(Keyboard::Enter))
                 {
                     currentState = Game;
+                    //newgame set cat&plat position
                     x = 100;
                     y = 100;
                     dy = 0;
+                    for (int i = 0; i < 8; i++)
+                    {
+                        plat[i].x = rand() % 600;
+                        plat[i].y = rand() % 1000;
+                    }
                 }
             }
             if (sQuitGOButton.getGlobalBounds().contains(app.mapPixelToCoords(Mouse::getPosition(app))))
@@ -153,7 +156,6 @@ int main()
                     app.close();
                 }
             }
-          
             app.draw(sBGgameover);
             app.draw(sgameover);
             app.draw(sNewGameButton);
