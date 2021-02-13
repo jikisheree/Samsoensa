@@ -57,23 +57,6 @@ int main()
                 app.close();
         }
 
-        if (Keyboard::isKeyPressed(Keyboard::Enter)) currentState = Game;
-        if (sPlayButton.getGlobalBounds().contains(app.mapPixelToCoords(Mouse::getPosition(app))))
-        {
-            if (Mouse::isButtonPressed(Mouse::Left))
-            {
-                currentState = Game;
-            }
-        }
-        if (sQuitButton.getGlobalBounds().contains(app.mapPixelToCoords(Mouse::getPosition(app))))
-        {
-            //sQuitButton.setTexture();
-            if (Mouse::isButtonPressed(Mouse::Left))
-            {
-                app.close();
-            }
-        }
-
         switch (currentState)
         {
         case MainMenu:
