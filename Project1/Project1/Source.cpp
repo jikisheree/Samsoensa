@@ -15,7 +15,7 @@ int main()
     RenderWindow app(VideoMode(600, 853), "Raise dumb!");
     app.setFramerateLimit(60);
 
-    Texture x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14;
+    Texture x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15;
     x1.loadFromFile("images/bg1.jpg");
     x2.loadFromFile("images/platform.png");
     x3.loadFromFile("images/cat.png");
@@ -30,6 +30,7 @@ int main()
     x12.loadFromFile("images/newGame2.png");
     x13.loadFromFile("images/quitButtonGO.png");
     x14.loadFromFile("images/quitButtonGO2.png");
+    x15.loadFromFile("images/cat2.png");
 
 
     Sprite sBackgroundGame(x1), sPlat(x2), sChars(x3), sBackgroundMainMenu(x4), sPlayButton(x5), sQuitButton(x6),
@@ -37,10 +38,10 @@ int main()
 
     point plat[20];
 
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 8; i++)
     {
-        plat[i].x = rand() % 600;
-        plat[i].y = rand() % 853;
+        plat[i].x = rand() % 488;
+        plat[i].y = rand() % 1000;
     }
 
     int x = 100, y = 100, h = 200;
@@ -91,29 +92,33 @@ int main()
             break;
         case Game:
             // jump
-            if (Keyboard::isKeyPressed(Keyboard::Right)) x += 3;
-            if (Keyboard::isKeyPressed(Keyboard::Left)) x -= 3;
+            if (Keyboard::isKeyPressed(Keyboard::Right) or Keyboard::isKeyPressed(Keyboard::D)) {
+                x += 3;
+            
+            }
+
+            if (Keyboard::isKeyPressed(Keyboard::Left) or Keyboard::isKeyPressed(Keyboard::A)) x -= 3;
             if (Keyboard::isKeyPressed(Keyboard::Escape)) currentState = MainMenu;
             dy += 0.5;
             y += dy;
             if (y > 853) currentState = GameOver;
 
             if (y < h)
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < 8; i++)
                 {
                     y = h;
                     plat[i].y = plat[i].y - dy;
-                    if (plat[i].y > 853) { plat[i].y = 0; plat[i].x = rand() % 300; }
+                    if (plat[i].y > 853) { plat[i].y = 25; plat[i].x = rand() % 488; }
                 }
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 8; i++)
                 if ((x + 100 > plat[i].x) && (x + 40 < plat[i].x + 140) &&
                     (y + 140 > plat[i].y) && (y + 140 < plat[i].y + 40) && (dy > 0)) dy = -20;
 
             sChars.setPosition(x, y);
 
             app.draw(sBackgroundGame);
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 8; i++)
             {
                 sPlat.setPosition(plat[i].x, plat[i].y);
                 app.draw(sPlat);
@@ -164,4 +169,3 @@ int main()
     return 0;
 }
 
-/* Test pushing */
