@@ -15,7 +15,7 @@ int main()
     RenderWindow app(VideoMode(600, 853), "Raise dumb!");
     app.setFramerateLimit(60);
 
-    Texture x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15;
+    Texture x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x17, x18, x19, x20;
     x1.loadFromFile("images/bg1.jpg");
     x2.loadFromFile("images/platform.png");
     x3.loadFromFile("images/cat.png");
@@ -31,10 +31,15 @@ int main()
     x13.loadFromFile("images/quitButtonGO.png");
     x14.loadFromFile("images/quitButtonGO2.png");
     x15.loadFromFile("images/cat2.png");
+    x16.loadFromFile("images/BGpause.png");
+    x17.loadFromFile("images/replay.png");
+    x18.loadFromFile("images/replay2.png");
+    x19.loadFromFile("images/resume.png");
+    x20.loadFromFile("images/resume2.png");
 
 
     Sprite sBackgroundGame(x1), sPlat(x2), sChars(x3), sBackgroundMainMenu(x4), sPlayButton(x5), sQuitButton(x6),
-        sBGgameover(x9), sgameover(x10), sNewGameButton(x11), sQuitGOButton(x13);
+        sBGgameover(x9), sgameover(x10), sNewGameButton(x11), sQuitGOButton(x13),sReplayButton(x17),sResumeButton(x19),sBackgroundPause(x16);
 
     point plat[20];
 
@@ -46,7 +51,7 @@ int main()
 
     int x = 100, y = 100, h = 200;
     float dx = 0, dy = 0;
-    enum States { MainMenu , Game , GameOver };
+    enum States { MainMenu , Game , GameOver ,Pause};
     short unsigned currentState = MainMenu;
 
     while (app.isOpen())
@@ -96,7 +101,7 @@ int main()
             // jump
             if (Keyboard::isKeyPressed(Keyboard::Right) or Keyboard::isKeyPressed(Keyboard::D)) x += 3;
             if (Keyboard::isKeyPressed(Keyboard::Left) or Keyboard::isKeyPressed(Keyboard::A)) x -= 3;
-            if (Keyboard::isKeyPressed(Keyboard::Escape)) currentState = MainMenu;
+            if (Keyboard::isKeyPressed(Keyboard::Escape)) currentState = Pause;
             dy += 0.5;
             y += dy;
             if (y > 853) currentState = GameOver;
@@ -160,6 +165,59 @@ int main()
             app.draw(sgameover);
             app.draw(sNewGameButton);
             app.draw(sQuitGOButton);
+            break;
+        case Pause:
+            sResumeButton.setPosition(167, 182);
+            sReplayButton.setPosition(165, 303);
+            sQuitButton.setPosition(177, 421);
+            sResumeButton.setTexture(x19);
+            sReplayButton.setTexture(x17);
+            sQuitButton.setTexture(x6);
+            //resume
+            if (Keyboard::isKeyPressed(Keyboard::Enter))
+            {
+                sResumeButton.setTexture(x20);
+                currentState = Game;
+            }
+            if (sResumeButton.getGlobalBounds().contains(app.mapPixelToCoords(Mouse::getPosition(app))))
+            {
+                sResumeButton.setTexture(x20);
+                if (Mouse::isButtonPressed(Mouse::Left))
+                {
+                    currentState = Game;
+                }
+            }
+            // replay
+            if (sReplayButton.getGlobalBounds().contains(app.mapPixelToCoords(Mouse::getPosition(app))))
+            {
+                sReplayButton.setTexture(x18);
+                if (Mouse::isButtonPressed(Mouse::Left))
+                {
+                    currentState = Game;
+                    x = 100;
+                    y = 100;
+                    dy = 0;
+                    for (int i = 0; i < 8; i++)
+                    {
+                        plat[i].x = rand() % 600;
+                        plat[i].y = rand() % 1000;
+                    }
+                }
+            }
+            //Quit
+            if (sQuitButton.getGlobalBounds().contains(app.mapPixelToCoords(Mouse::getPosition(app))))
+            {
+                sQuitButton.setTexture(x8);
+                if (Mouse::isButtonPressed(Mouse::Left))
+                {
+                    app.close();
+                }
+            }
+            app.draw(sBackgroundPause);
+            app.draw(sResumeButton);
+            app.draw(sReplayButton);
+            app.draw(sQuitButton);
+
             break;
         default:
             break;
