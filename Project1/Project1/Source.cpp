@@ -3,11 +3,6 @@
 
 using namespace sf;
 
-struct point
-{
-    int x, y;
-};
-
 int main()
 {
     srand(time(0));
@@ -41,12 +36,23 @@ int main()
     Sprite sBackgroundGame(x1), sPlat(x2), sChars(x3), sBackgroundMainMenu(x4), sPlayButton(x5), sQuitButton(x6),
         sBGgameover(x9), sgameover(x10), sNewGameButton(x11), sQuitGOButton(x13),sReplayButton(x17),sResumeButton(x19),sBackgroundPause(x16);
 
-    point plat[20];
+    Sprite plat[20];
 
-    for (int i = 0; i < 8; i++)
+    // random & check platform 
+    for (int i = 0; i < 6; i++)
     {
-        plat[i].x = rand() % 600;
-        plat[i].y = rand() % 1000;
+       plat[i] = sPlat;
+       plat[i].setPosition(rand() % 500, rand() % 853);
+
+       for (int j = 0; j != i;j++)
+        {
+           if (plat[i].getPosition().y > plat[j].getPosition().y - 110 
+               && plat[i].getPosition().y < plat[j].getPosition().y + 110)
+            {
+               i--;
+               break;
+            }
+        }
     }
 
     int x = 100, y = 100, h = 200;
@@ -98,33 +104,37 @@ int main()
             
             break;
         case Game:
-            // jump
-            if (Keyboard::isKeyPressed(Keyboard::Right) or Keyboard::isKeyPressed(Keyboard::D)) x += 3;
-            if (Keyboard::isKeyPressed(Keyboard::Left) or Keyboard::isKeyPressed(Keyboard::A)) x -= 3;
+            if (Keyboard::isKeyPressed(Keyboard::Right) or Keyboard::isKeyPressed(Keyboard::D)) x += 3.5;
+            if (Keyboard::isKeyPressed(Keyboard::Left) or Keyboard::isKeyPressed(Keyboard::A)) x -= 3.5;
             if (Keyboard::isKeyPressed(Keyboard::Escape)) currentState = Pause;
-            dy += 0.5;
+            dy += 0.49;
             y += dy;
             if (y > 853) currentState = GameOver;
 
+            //jump
+            for (int i = 0; i < 6; i++)
+            {
+                if ((x + 65 > plat[i].getPosition().x) && (x + 30 < plat[i].getPosition().x + 112) &&
+                    (y + 125 > plat[i].getPosition().y) && (y + 125 < plat[i].getPosition().y + 40) && (dy > 0)) dy = -20;
+            }
+
+            //Move the platform down and set new paltform position
             if (y < h)
-                for (int i = 0; i < 8; i++)
+            {
+                for (int i = 0; i < 6; i++)
                 {
                     y = h;
-                    plat[i].y = plat[i].y - dy;
-                    if (plat[i].y > 853) { plat[i].y = 25; plat[i].x = rand() % 488; }
+                    plat[i].setPosition(plat[i].getPosition().x, plat[i].getPosition().y - dy);
+                    if (plat[i].getPosition().y > 853) {plat[i].setPosition(rand() % 500, -100);}
                 }
-
-            for (int i = 0; i < 8; i++)
-                if ((x + 100 > plat[i].x) && (x + 40 < plat[i].x + 140) &&
-                    (y + 140 > plat[i].y) && (y + 140 < plat[i].y + 40) && (dy > 0)) dy = -20;
+            }
 
             sChars.setPosition(x, y);
-
+            //render
             app.draw(sBackgroundGame);
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 6; i++)
             {
-                sPlat.setPosition(plat[i].x, plat[i].y);
-                app.draw(sPlat);
+                app.draw(plat[i]);
             }
             app.draw(sChars);
             break;
@@ -146,10 +156,19 @@ int main()
                     x = 100;
                     y = 100;
                     dy = 0;
-                    for (int i = 0; i < 8; i++)
+                    for (int i = 0; i < 6; i++)
                     {
-                        plat[i].x = rand() % 600;
-                        plat[i].y = rand() % 1000;
+                        plat[i] = sPlat;
+                        plat[i].setPosition(rand() % 500, rand() % 853);
+                        for (int j = 0; j != i; j++)
+                        {
+                            if (plat[i].getPosition().y > (plat[j].getPosition().y - 110)
+                                && plat[i].getPosition().y < (plat[j].getPosition().y + 110))
+                            {
+                                i--;
+                                break;
+                            }
+                        }
                     }
                 }
             }
@@ -194,13 +213,23 @@ int main()
                 if (Mouse::isButtonPressed(Mouse::Left))
                 {
                     currentState = Game;
+                    //set new cat&plat position
                     x = 100;
                     y = 100;
                     dy = 0;
-                    for (int i = 0; i < 8; i++)
+                    for (int i = 0; i < 6; i++)
                     {
-                        plat[i].x = rand() % 600;
-                        plat[i].y = rand() % 1000;
+                        plat[i] = sPlat;
+                        plat[i].setPosition(rand() % 500, rand() % 853);
+                        for (int j = 0; j != i; j++)
+                        {
+                            if (plat[i].getPosition().y > (plat[j].getPosition().y - 110)
+                                && plat[i].getPosition().y < (plat[j].getPosition().y + 110))
+                            {
+                                i--;
+                                break;
+                            }
+                        }
                     }
                 }
             }
