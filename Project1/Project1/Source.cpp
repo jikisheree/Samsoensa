@@ -11,7 +11,7 @@ int main()
     RenderWindow app(VideoMode(600, 853), "Raise dumb!");
     app.setFramerateLimit(60);
 
-    //open music from file
+    //open music from file & set loop/volume.
     Music musicmenu, musicgame;
     musicmenu.openFromFile("sounds/lala.wav");
     musicgame.openFromFile("sounds/butter_building.wav");
@@ -42,7 +42,6 @@ int main()
     x18.loadFromFile("images/replay2.png");
     x19.loadFromFile("images/resume.png");
     x20.loadFromFile("images/resume2.png");
-
 
     Sprite sBackgroundGame(x1), sPlat(x2), sChars(x3), sBackgroundMainMenu(x4), sPlayButton(x5), sQuitButton(x6),
         sBGgameover(x9), sgameover(x10), sNewGameButton(x11), sQuitGOButton(x13),sReplayButton(x17),sResumeButton(x19),sBackgroundPause(x16);
@@ -119,8 +118,8 @@ int main()
             
             break;
         case Game:
-            if (Keyboard::isKeyPressed(Keyboard::Right) or Keyboard::isKeyPressed(Keyboard::D)) x += 4.5;
-            if (Keyboard::isKeyPressed(Keyboard::Left) or Keyboard::isKeyPressed(Keyboard::A)) x -= 4.5;
+            if (Keyboard::isKeyPressed(Keyboard::Right) or Keyboard::isKeyPressed(Keyboard::D)) x += 4.5f;
+            if (Keyboard::isKeyPressed(Keyboard::Left) or Keyboard::isKeyPressed(Keyboard::A)) x -= 4.5f;
             if (Keyboard::isKeyPressed(Keyboard::Escape))
             {
                 currentState = Pause;
@@ -148,7 +147,7 @@ int main()
                 {
                     y = h;
                     plat[i].setPosition(plat[i].getPosition().x, plat[i].getPosition().y - dy);
-                    if (plat[i].getPosition().y > 853) {plat[i].setPosition(rand() % 500, -100);}
+                    if (plat[i].getPosition().y > 853) {plat[i].setPosition(rand() % 500, -110);}
                 }
             }
 
@@ -286,4 +285,3 @@ int main()
 
     return 0;
 }
-
