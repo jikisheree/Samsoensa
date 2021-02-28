@@ -14,11 +14,12 @@ int main()
     //open music from file
     Music musicmenu, musicgame;
     musicmenu.openFromFile("sounds/lala.wav");
-    musicgame.openFromFile("sounds/butter.wav");
+    musicgame.openFromFile("sounds/butter_building.wav");
 
     musicmenu.play();
     musicmenu.setVolume(10);
     musicgame.setVolume(10);
+    musicgame.setLoop(true);
 
     Texture x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x17, x18, x19, x20;
     x1.loadFromFile("images/bg1.jpg");
@@ -118,8 +119,8 @@ int main()
             
             break;
         case Game:
-            if (Keyboard::isKeyPressed(Keyboard::Right) or Keyboard::isKeyPressed(Keyboard::D)) x += 3.5;
-            if (Keyboard::isKeyPressed(Keyboard::Left) or Keyboard::isKeyPressed(Keyboard::A)) x -= 3.5;
+            if (Keyboard::isKeyPressed(Keyboard::Right) or Keyboard::isKeyPressed(Keyboard::D)) x += 4.5;
+            if (Keyboard::isKeyPressed(Keyboard::Left) or Keyboard::isKeyPressed(Keyboard::A)) x -= 4.5;
             if (Keyboard::isKeyPressed(Keyboard::Escape))
             {
                 currentState = Pause;
