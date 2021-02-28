@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <time.h>
 
 using namespace sf;
@@ -9,6 +10,15 @@ int main()
 
     RenderWindow app(VideoMode(600, 853), "Raise dumb!");
     app.setFramerateLimit(60);
+
+    //open music from file
+    Music musicmenu, musicgame;
+    musicmenu.openFromFile("sounds/lala.wav");
+    musicgame.openFromFile("sounds/butter.wav");
+
+    musicmenu.play();
+    musicmenu.setVolume(10);
+    musicgame.setVolume(10);
 
     Texture x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x17, x18, x19, x20;
     x1.loadFromFile("images/bg1.jpg");
@@ -81,6 +91,8 @@ int main()
             {
                 sPlayButton.setTexture(x7);
                 currentState = Game;
+                musicmenu.stop();
+                musicgame.play();
             }
             if (sPlayButton.getGlobalBounds().contains(app.mapPixelToCoords(Mouse::getPosition(app))))
             {
@@ -88,6 +100,8 @@ int main()
                 if (Mouse::isButtonPressed(Mouse::Left))
                 {
                     currentState = Game;
+                    musicmenu.stop();
+                    musicgame.play();
                 }
             }
             if (sQuitButton.getGlobalBounds().contains(app.mapPixelToCoords(Mouse::getPosition(app))))
@@ -106,10 +120,18 @@ int main()
         case Game:
             if (Keyboard::isKeyPressed(Keyboard::Right) or Keyboard::isKeyPressed(Keyboard::D)) x += 3.5;
             if (Keyboard::isKeyPressed(Keyboard::Left) or Keyboard::isKeyPressed(Keyboard::A)) x -= 3.5;
-            if (Keyboard::isKeyPressed(Keyboard::Escape)) currentState = Pause;
+            if (Keyboard::isKeyPressed(Keyboard::Escape))
+            {
+                currentState = Pause;
+                musicgame.pause();
+            }
             dy += 0.49;
             y += dy;
-            if (y > 853) currentState = GameOver;
+            if (y > 853)
+            {
+                currentState = GameOver;
+                musicgame.pause();
+            }
 
             //jump
             for (int i = 0; i < 6; i++)
@@ -152,6 +174,8 @@ int main()
                 if (Mouse::isButtonPressed(Mouse::Left) || Keyboard::isKeyPressed(Keyboard::Enter))
                 {
                     currentState = Game;
+                    musicgame.stop();
+                    musicgame.play();
                     //newgame set cat&plat position
                     x = 100;
                     y = 100;
@@ -197,6 +221,7 @@ int main()
             {
                 sResumeButton.setTexture(x20);
                 currentState = Game;
+                musicgame.play();
             }
             if (sResumeButton.getGlobalBounds().contains(app.mapPixelToCoords(Mouse::getPosition(app))))
             {
@@ -204,6 +229,7 @@ int main()
                 if (Mouse::isButtonPressed(Mouse::Left))
                 {
                     currentState = Game;
+                    musicgame.play();
                 }
             }
             // replay
@@ -213,6 +239,8 @@ int main()
                 if (Mouse::isButtonPressed(Mouse::Left))
                 {
                     currentState = Game;
+                    musicgame.stop();
+                    musicgame.play();
                     //set new cat&plat position
                     x = 100;
                     y = 100;
