@@ -17,9 +17,10 @@ int main()
     musicgame.openFromFile("sounds/butter_building.wav");
 
     musicmenu.play();
-    musicmenu.setVolume(10);
-    musicgame.setVolume(10);
+    musicmenu.setVolume(5);
+    musicgame.setVolume(2);
     musicgame.setLoop(true);
+    musicmenu.setLoop(true);
 
     Texture x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x17, x18, x19, x20;
     x1.loadFromFile("images/bg1.jpg");
@@ -44,20 +45,21 @@ int main()
     x20.loadFromFile("images/resume2.png");
 
     Sprite sBackgroundGame(x1), sPlat(x2), sChars(x3), sBackgroundMainMenu(x4), sPlayButton(x5), sQuitButton(x6),
-        sBGgameover(x9), sgameover(x10), sNewGameButton(x11), sQuitGOButton(x13),sReplayButton(x17),sResumeButton(x19),sBackgroundPause(x16);
+        sBGgameover(x9), sgameover(x10), sNewGameButton(x11), sQuitGOButton(x13),sReplayButton(x17),
+        sResumeButton(x19),sBackgroundPause(x16);
 
-    Sprite plat[20];
+    Sprite plat[36];
 
     // random & check platform 
     for (int i = 0; i < 6; i++)
     {
-       plat[i] = sPlat;
-       plat[i].setPosition(rand() % 500, rand() % 853);
-
-       for (int j = 0; j != i;j++)
+        plat[i].setOrigin(0, 0);
+        plat[i] = sPlat;
+        plat[i].setPosition(rand() % 500, rand() % 853);
+        for (int j = 0; j != i;j++)
         {
-           if (plat[i].getPosition().y > plat[j].getPosition().y - 110 
-               && plat[i].getPosition().y < plat[j].getPosition().y + 110)
+           if (plat[i].getPosition().y > plat[j].getPosition().y - 100
+               && plat[i].getPosition().y < plat[j].getPosition().y + 100)
             {
                i--;
                break;
@@ -147,7 +149,7 @@ int main()
                 {
                     y = h;
                     plat[i].setPosition(plat[i].getPosition().x, plat[i].getPosition().y - dy);
-                    if (plat[i].getPosition().y > 853) {plat[i].setPosition(rand() % 500, -110);}
+                    if (plat[i].getPosition().y > 853) {plat[i].setPosition(rand() % 500, -100);}
                 }
             }
 
@@ -186,8 +188,8 @@ int main()
                         plat[i].setPosition(rand() % 500, rand() % 853);
                         for (int j = 0; j != i; j++)
                         {
-                            if (plat[i].getPosition().y > (plat[j].getPosition().y - 110)
-                                && plat[i].getPosition().y < (plat[j].getPosition().y + 110))
+                            if (plat[i].getPosition().y > (plat[j].getPosition().y - 100)
+                                && plat[i].getPosition().y < (plat[j].getPosition().y + 100))
                             {
                                 i--;
                                 break;
@@ -251,8 +253,8 @@ int main()
                         plat[i].setPosition(rand() % 500, rand() % 853);
                         for (int j = 0; j != i; j++)
                         {
-                            if (plat[i].getPosition().y > (plat[j].getPosition().y - 110)
-                                && plat[i].getPosition().y < (plat[j].getPosition().y + 110))
+                            if (plat[i].getPosition().y > (plat[j].getPosition().y - 100)
+                                && plat[i].getPosition().y < (plat[j].getPosition().y + 100))
                             {
                                 i--;
                                 break;
