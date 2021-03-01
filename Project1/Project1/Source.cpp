@@ -53,7 +53,6 @@ int main()
     // random & check platform 
     for (int i = 0; i < 6; i++)
     {
-        plat[i].setOrigin(0, 0);
         plat[i] = sPlat;
         plat[i].setPosition(rand() % 500, rand() % 853);
         for (int j = 0; j != i;j++)
@@ -61,7 +60,7 @@ int main()
            if (plat[i].getPosition().y > plat[j].getPosition().y - 100
                && plat[i].getPosition().y < plat[j].getPosition().y + 100)
             {
-               i--;
+               i = 0;
                break;
             }
         }
@@ -191,7 +190,7 @@ int main()
                             if (plat[i].getPosition().y > (plat[j].getPosition().y - 100)
                                 && plat[i].getPosition().y < (plat[j].getPosition().y + 100))
                             {
-                                i--;
+                                i = 0;
                                 break;
                             }
                         }
@@ -256,7 +255,7 @@ int main()
                             if (plat[i].getPosition().y > (plat[j].getPosition().y - 100)
                                 && plat[i].getPosition().y < (plat[j].getPosition().y + 100))
                             {
-                                i--;
+                                i = 0;
                                 break;
                             }
                         }
