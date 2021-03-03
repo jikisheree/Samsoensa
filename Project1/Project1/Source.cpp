@@ -69,7 +69,7 @@ int main()
         }
     }
     //Random fish
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 4; i++)
     {
         fish[i] = sFish;
         fish[i].setPosition(rand() % 560, rand() % 840);
@@ -79,7 +79,7 @@ int main()
     int a = rand() % 6;
     sDog.setPosition(plat[a].getPosition().x + 10, plat[a].getPosition().y - 103);
 
-    int x = 100, y = 100, h = 200, a;
+    int x = 100, y = 100, h = 200;
     float dx = 0, dy = 0;
     enum States { MainMenu , Game , GameOver ,Pause};
     short unsigned currentState = MainMenu;
@@ -151,7 +151,7 @@ int main()
             {
                 x = 0;
             }
-            if (x < 0)
+            if (x < (-100))
             {
                 x = 600;
             }
@@ -177,7 +177,7 @@ int main()
                     fish[i].setPosition(fish[i].getPosition().x, fish[i].getPosition().y - dy);
                     if (fish[i].getPosition().y > 853) { fish[i].setPosition(rand() % 560, -10);}
                 }
-                sDog.getPosition(plat[a].getPosition().x + 10, plat[a].getPosition().y - (103 + dy));
+                sDog.setPosition(plat[a].getPosition().x + 10, plat[a].getPosition().y - (103 + dy));
             }
 
             sChars.setPosition(x, y);
