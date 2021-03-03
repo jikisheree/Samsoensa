@@ -133,7 +133,15 @@ int main()
                 currentState = GameOver;
                 musicgame.pause();
             }
-
+            //if x positoin out of window >> change to another side
+            if (x > 600)
+            {
+                x = 0;
+            }
+            if (x < 0)
+            {
+                x = 600;
+            }
             //jump
             for (int i = 0; i < 6; i++)
             {
