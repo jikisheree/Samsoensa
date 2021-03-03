@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <time.h>
+#include <cstdlib>
 
 using namespace sf;
 
@@ -49,6 +50,12 @@ int main()
     Sprite sBackgroundGame(x1), sPlat(x2), sChars(x3), sBackgroundMainMenu(x4), sPlayButton(x5), sQuitButton(x6),
         sBGgameover(x9), sgameover(x10), sNewGameButton(x11), sQuitGOButton(x13),sReplayButton(x17),
         sResumeButton(x19),sBackgroundPause(x16), sDog(x21), sFish(x22);
+    
+
+    Font font;
+    if (!font.loadFromFile("font/Bleo.ttf"))
+        throw("not load");
+    Text score;
 
     Sprite plat[6];
     Sprite fish[10];
@@ -83,6 +90,7 @@ int main()
     float dx = 0, dy = 0;
     enum States { MainMenu , Game , GameOver ,Pause};
     short unsigned currentState = MainMenu;
+
 
     while (app.isOpen())
     {
@@ -181,6 +189,16 @@ int main()
             }
 
             sChars.setPosition(x, y);
+
+            //score
+           
+            score.setString("score : ");
+            //score.setString(itoa(sc));
+            score.setFont(font);
+            score.setCharacterSize(100);
+            score.setFillColor(Color::White);
+            score.setStyle(Text::Bold);
+
             //render
             app.draw(sBackgroundGame);
             for (int i = 0; i < 6; i++)
@@ -193,6 +211,7 @@ int main()
             }
             app.draw(sChars);
             app.draw(sDog);
+            app.draw(score);
             break;
         case GameOver:
             sgameover.setPosition(22, 78);
