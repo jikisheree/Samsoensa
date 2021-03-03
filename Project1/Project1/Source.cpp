@@ -22,7 +22,7 @@ int main()
     musicgame.setLoop(true);
     musicmenu.setLoop(true);
 
-    Texture x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x17, x18, x19, x20;
+    Texture x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x17, x18, x19, x20, x21, x22;
     x1.loadFromFile("images/bg1.jpg");
     x2.loadFromFile("images/platform.png");
     x3.loadFromFile("images/cat.png");
@@ -43,10 +43,12 @@ int main()
     x18.loadFromFile("images/replay2.png");
     x19.loadFromFile("images/resume.png");
     x20.loadFromFile("images/resume2.png");
+    x21.loadFromFile("images/dog.png");
+    x22.loadFromFile("images/fish.png");
 
     Sprite sBackgroundGame(x1), sPlat(x2), sChars(x3), sBackgroundMainMenu(x4), sPlayButton(x5), sQuitButton(x6),
         sBGgameover(x9), sgameover(x10), sNewGameButton(x11), sQuitGOButton(x13),sReplayButton(x17),
-        sResumeButton(x19),sBackgroundPause(x16);
+        sResumeButton(x19),sBackgroundPause(x16), sDog(x21), sFish(x22);
 
     Sprite plat[36];
 
@@ -62,6 +64,21 @@ int main()
             {
                i = 0;
                break;
+            }
+        }
+    }
+    //Ran dom fish
+    for (int i = 0; i < 10; i++)
+    {
+        plat[i] = sPlat;
+        plat[i].setPosition(rand() % 500, rand() % 853);
+        for (int j = 0; j != i; j++)
+        {
+            if (plat[i].getPosition().y > plat[j].getPosition().y - 100
+                && plat[i].getPosition().y < plat[j].getPosition().y + 100)
+            {
+                i = 0;
+                break;
             }
         }
     }
