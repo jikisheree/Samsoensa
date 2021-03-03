@@ -50,7 +50,8 @@ int main()
         sBGgameover(x9), sgameover(x10), sNewGameButton(x11), sQuitGOButton(x13),sReplayButton(x17),
         sResumeButton(x19),sBackgroundPause(x16), sDog(x21), sFish(x22);
 
-    Sprite plat[36];
+    Sprite plat[6];
+    Sprite fish[10];
 
     // random & check platform 
     for (int i = 0; i < 6; i++)
@@ -67,23 +68,18 @@ int main()
             }
         }
     }
-    //Ran dom fish
+    //Random fish
     for (int i = 0; i < 10; i++)
     {
-        plat[i] = sPlat;
-        plat[i].setPosition(rand() % 500, rand() % 853);
-        for (int j = 0; j != i; j++)
-        {
-            if (plat[i].getPosition().y > plat[j].getPosition().y - 100
-                && plat[i].getPosition().y < plat[j].getPosition().y + 100)
-            {
-                i = 0;
-                break;
-            }
-        }
+        fish[i] = sFish;
+        fish[i].setPosition(rand() % 560, rand() % 840);
     }
 
-    int x = 100, y = 100, h = 200;
+    //set dog position on random platform
+    int a = rand() % 6;
+    sDog.setPosition(plat[a].getPosition().x + 10, plat[a].getPosition().y - 103);
+
+    int x = 100, y = 100, h = 200, a;
     float dx = 0, dy = 0;
     enum States { MainMenu , Game , GameOver ,Pause};
     short unsigned currentState = MainMenu;
@@ -150,7 +146,7 @@ int main()
                 currentState = GameOver;
                 musicgame.pause();
             }
-            //if x positoin out of window >> change to another side
+            //if charactor positoin out of window >> change to another side
             if (x > 600)
             {
                 x = 0;
@@ -175,6 +171,13 @@ int main()
                     plat[i].setPosition(plat[i].getPosition().x, plat[i].getPosition().y - dy);
                     if (plat[i].getPosition().y > 853) {plat[i].setPosition(rand() % 500, -100);}
                 }
+                for (int i = 0; i < 10; i++)
+                {
+                    y = h;
+                    fish[i].setPosition(fish[i].getPosition().x, fish[i].getPosition().y - dy);
+                    if (fish[i].getPosition().y > 853) { fish[i].setPosition(rand() % 560, -10);}
+                }
+                sDog.getPosition(plat[a].getPosition().x + 10, plat[a].getPosition().y - (103 + dy));
             }
 
             sChars.setPosition(x, y);
@@ -184,7 +187,12 @@ int main()
             {
                 app.draw(plat[i]);
             }
+            for (int i = 0; i < 10; i++)
+            {
+                app.draw(fish[i]);
+            }
             app.draw(sChars);
+            app.draw(sDog);
             break;
         case GameOver:
             sgameover.setPosition(22, 78);
