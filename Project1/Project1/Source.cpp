@@ -49,33 +49,33 @@ int main()
     x22.loadFromFile("images/fish.png");
 
     Sprite sBackgroundGame(x1), sPlat(x2), sChars(x3), sBackgroundMainMenu(x4), sPlayButton(x5), sQuitButton(x6),
-        sBGgameover(x9), sgameover(x10), sNewGameButton(x11), sQuitGOButton(x13),sReplayButton(x17),
-        sResumeButton(x19),sBackgroundPause(x16), sDog(x21), sFish(x22);
+        sBGgameover(x9), sgameover(x10), sNewGameButton(x11), sQuitGOButton(x13), sReplayButton(x17),
+        sResumeButton(x19), sBackgroundPause(x16), sDog(x21), sFish(x22);
     Sprite plat[6];
     Sprite fish[10];
 
     //load & set font
     Font font;
     font.loadFromFile("font/Pixeboy.ttf");
-    Text scoretext,score,highscoretext;
+    Text scoretext, score, highscoretext;
     scoretext.setFillColor(Color::White);
     highscoretext.setFillColor(Color::White);
     scoretext.setFont(font);
     highscoretext.setFont(font);
-    
+
 
     // random & check platform 
     for (int i = 0; i < 6; i++)
     {
         plat[i] = sPlat;
         plat[i].setPosition(rand() % 500, rand() % 853);
-        for (int j = 0; j != i;j++)
+        for (int j = 0; j != i; j++)
         {
-           if (plat[i].getPosition().y > plat[j].getPosition().y - 100
-               && plat[i].getPosition().y < plat[j].getPosition().y + 100)
+            if (plat[i].getPosition().y > plat[j].getPosition().y - 100
+                && plat[i].getPosition().y < plat[j].getPosition().y + 100)
             {
-               i = 0;
-               break;
+                i = 0;
+                break;
             }
         }
     }
@@ -93,7 +93,7 @@ int main()
     int x = 100, y = 100, h = 200;
     int scores = 0, highscore = 0;
     float dx = 0, dy = 0;
-    enum States { MainMenu , Game , GameOver ,Pause};
+    enum States { MainMenu, Game, GameOver, Pause };
     short unsigned currentState = MainMenu;
 
     while (app.isOpen())
@@ -215,11 +215,11 @@ int main()
                     }
                 }
             }
-                if (sChars.getGlobalBounds().intersects(sDog.getGlobalBounds())) {
-                    scores -= 20;
-                    scoretext.setString("Score: " + std::to_string(scores));
-                    sDog.setPosition(4000, 4000);                           
-                }
+            if (sChars.getGlobalBounds().intersects(sDog.getGlobalBounds())) {
+                scores -= 20;
+                scoretext.setString("Score: " + std::to_string(scores));
+                sDog.setPosition(4000, 4000);
+            }
 
             //GameOver
             if (y > 853)
@@ -236,8 +236,8 @@ int main()
                 musicgame.pause();
                 musicgameover.play();
             }
-           
-           
+
+
             //update cat position
             sChars.setPosition(x, y);
 
@@ -263,10 +263,10 @@ int main()
             sNewGameButton.setTexture(x11);
             sQuitGOButton.setTexture(x13);
             highscoretext.setCharacterSize(60);
-            highscoretext.setPosition(45,175);
+            highscoretext.setPosition(45, 175);
             highscoretext.setString("HIGH SCORE : " + std::to_string(highscore));
             scoretext.setCharacterSize(60);
-            scoretext.setPosition(45,235);
+            scoretext.setPosition(45, 235);
 
             //newgamebutton
             if (sNewGameButton.getGlobalBounds().contains(app.mapPixelToCoords(Mouse::getPosition(app))) || Keyboard::isKeyPressed(Keyboard::Enter))
