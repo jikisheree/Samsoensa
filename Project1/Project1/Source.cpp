@@ -201,7 +201,11 @@ int main()
                     fish[i].setPosition(fish[i].getPosition().x, fish[i].getPosition().y - dy);
                     if (fish[i].getPosition().y > 853) { fish[i].setPosition(rand() % 560, -10); }
                 }
-                sDog.setPosition(plat[a].getPosition().x + 10, plat[a].getPosition().y - (103 + dy));
+                if (scores > 200) {
+      
+                    sDog.setPosition(plat[a].getPosition().x + 10, plat[a].getPosition().y - (103 + dy));
+                }
+                
             }
             //if cat Colliding with fish or dog then it dissappear
             for (int i = 0; i < 10; i++) {
@@ -251,7 +255,9 @@ int main()
             {
                 app.draw(fish[i]);
             }
-            app.draw(sDog);
+            if(scores > 200){
+                app.draw(sDog);
+             }
             app.draw(sChars);
             app.draw(scoretext);
             break;
