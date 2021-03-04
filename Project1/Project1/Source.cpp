@@ -210,7 +210,12 @@ int main()
             for (int i = 0; i < 10; i++) {
                 if (sChars.getGlobalBounds().intersects(fish[i].getGlobalBounds())) {
                     fish[i].setPosition(4000,4000);
-                    scores +=0;
+                    scores +=5;
+                    scoretext.setString("Score: " + std::to_string(scores));
+                    if (scores > highscore)
+                    {
+                        highscore = scores;
+                    }
                 }
             }
        
