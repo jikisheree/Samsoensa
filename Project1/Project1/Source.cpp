@@ -168,7 +168,7 @@ int main()
                 musicgameover.play();
             }
             //if charactor positoin out of window >> change to another side
-            if (x > 600) x = 0;
+            if (x > 600) x = -80;
             if (x < -sChars.getGlobalBounds().width) x = 600;
 
             //score
