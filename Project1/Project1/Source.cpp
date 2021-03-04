@@ -161,14 +161,9 @@ int main()
             }
             dy += 0.49;
             y += dy;
-            if (y > 853)
-            {
-                currentState = GameOver;
-                musicgame.pause();
-                musicgameover.play();
-            }
+
             //if charactor positoin out of window >> change to another side
-            if (x > 600) x = 0;
+            if (x > 600) x = -70;
             if (x < -sChars.getGlobalBounds().width) x = 600;
 
             //score
@@ -189,28 +184,30 @@ int main()
                     (y + 125 > plat[i].getPosition().y) && (y + 125 < plat[i].getPosition().y + 40) && (dy > 0)) dy = -20;
             }
 
+
             //Move the platform down and set new paltform position
             if (y < h)
             {
+
                 for (int i = 0; i < 6; i++)
                 {
                     y = h;
                     plat[i].setPosition(plat[i].getPosition().x, plat[i].getPosition().y - dy);
-                    if (plat[i].getPosition().y > 853) {plat[i].setPosition(rand() % 500, -100);}
+                    if (plat[i].getPosition().y > 853) { plat[i].setPosition(rand() % 500, -100); }
                 }
                 for (int i = 0; i < 10; i++)
                 {
                     y = h;
                     fish[i].setPosition(fish[i].getPosition().x, fish[i].getPosition().y - dy);
-                    if (fish[i].getPosition().y > 853) { fish[i].setPosition(rand() % 560, -10);}
+                    if (fish[i].getPosition().y > 853) { fish[i].setPosition(rand() % 560, -10); }
                 }
                 sDog.setPosition(plat[a].getPosition().x + 10, plat[a].getPosition().y - (103 + dy));
             }
             //if cat Colliding with fish or dog then it dissappear
             for (int i = 0; i < 10; i++) {
                 if (sChars.getGlobalBounds().intersects(fish[i].getGlobalBounds())) {
-                    fish[i].setPosition(4000,4000);
-                    scores +=5;
+                    fish[i].setPosition(4000, 4000);
+                    scores += 5;
                     scoretext.setString("Score: " + std::to_string(scores));
                     if (scores > highscore)
                     {
@@ -218,7 +215,29 @@ int main()
                     }
                 }
             }
-       
+                if (sChars.getGlobalBounds().intersects(sDog.getGlobalBounds())) {
+                    scores -= 20;
+                    scoretext.setString("Score: " + std::to_string(scores));
+                    sDog.setPosition(4000, 4000);                           
+                }
+
+            //GameOver
+            if (y > 853)
+            {
+                currentState = GameOver;
+                musicgame.pause();
+                musicgameover.play();
+            }
+            if (scores < 0)
+            {
+                scores = 0;
+                scoretext.setString("Score: " + std::to_string(scores));
+                currentState = GameOver;
+                musicgame.pause();
+                musicgameover.play();
+            }
+           
+           
             //update cat position
             sChars.setPosition(x, y);
 
