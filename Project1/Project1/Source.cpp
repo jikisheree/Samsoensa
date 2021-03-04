@@ -62,8 +62,7 @@ int main()
     highscoretext.setFillColor(Color::White);
     scoretext.setFont(font);
     highscoretext.setFont(font);
-    scoretext.setString("score : ");
-    highscoretext.setString("HIGH SCORE : ");
+    
 
     // random & check platform 
     for (int i = 0; i < 6; i++)
@@ -92,6 +91,7 @@ int main()
     sDog.setPosition(plat[a].getPosition().x + 10, plat[a].getPosition().y - 103);
 
     int x = 100, y = 100, h = 200;
+    int scores = 0, highscore = 0;
     float dx = 0, dy = 0;
     enum States { MainMenu , Game , GameOver ,Pause};
     short unsigned currentState = MainMenu;
@@ -171,6 +171,17 @@ int main()
             if (x > 600) x = 0;
             if (x < -sChars.getGlobalBounds().width) x = 600;
 
+            //score
+            if (y == h)
+            {
+                scores += 1;
+                scoretext.setString("Score: " + std::to_string(scores));
+                if (scores > highscore)
+                {
+                    highscore = scores;
+                }
+            }
+
             //jump
             for (int i = 0; i < 6; i++)
             {
@@ -222,6 +233,7 @@ int main()
             sQuitGOButton.setTexture(x13);
             highscoretext.setCharacterSize(60);
             highscoretext.setPosition(45,175);
+            highscoretext.setString("HIGH SCORE : " + std::to_string(highscore));
             scoretext.setCharacterSize(60);
             scoretext.setPosition(45,235);
 
@@ -268,6 +280,9 @@ int main()
                     app.close();
                 }
             }
+
+            //set scores 
+            scores = 0;
 
             //Render
             app.draw(sBGgameover);
