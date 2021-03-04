@@ -1,7 +1,6 @@
-#include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
-#include <time.h>
-#include <cstdlib>
+#include "SFML/Graphics.hpp"
+#include "SFML/Audio.hpp"
+#include "time.h"
 
 using namespace sf;
 
@@ -12,14 +11,16 @@ int main()
     RenderWindow app(VideoMode(600, 853), "Raise dumb!");
     app.setFramerateLimit(60);
 
-    //open music from file & set loop/volume.
-    Music musicmenu, musicgame;
+    //open music from file
+    Music musicmenu, musicgame, musicgameover;
     musicmenu.openFromFile("sounds/lala.wav");
     musicgame.openFromFile("sounds/butter_building.wav");
-
+    musicgameover.openFromFile("sounds/gameover.wav");
+    //set loop/volume.
     musicmenu.play();
-    musicmenu.setVolume(5);
-    musicgame.setVolume(2);
+    musicmenu.setVolume(8);
+    musicgame.setVolume(5);
+    musicgameover.setVolume(4);
     musicgame.setLoop(true);
     musicmenu.setLoop(true);
 
@@ -50,15 +51,19 @@ int main()
     Sprite sBackgroundGame(x1), sPlat(x2), sChars(x3), sBackgroundMainMenu(x4), sPlayButton(x5), sQuitButton(x6),
         sBGgameover(x9), sgameover(x10), sNewGameButton(x11), sQuitGOButton(x13),sReplayButton(x17),
         sResumeButton(x19),sBackgroundPause(x16), sDog(x21), sFish(x22);
-    
-
-    Font font;
-    if (!font.loadFromFile("font/Bleo.ttf"))
-        throw("not load");
-    Text score;
-
     Sprite plat[6];
     Sprite fish[10];
+
+    //load & set font
+    Font font;
+    font.loadFromFile("font/Pixeboy.ttf");
+    Text scoretext,score,highscoretext;
+    scoretext.setFillColor(Color::White);
+    highscoretext.setFillColor(Color::White);
+    scoretext.setFont(font);
+    highscoretext.setFont(font);
+    scoretext.setString("score : ");
+    highscoretext.setString("HIGH SCORE : ");
 
     // random & check platform 
     for (int i = 0; i < 6; i++)
@@ -76,7 +81,7 @@ int main()
         }
     }
     //Random fish
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 10; i++)
     {
         fish[i] = sFish;
         fish[i].setPosition(rand() % 560, rand() % 840);
@@ -91,7 +96,6 @@ int main()
     enum States { MainMenu , Game , GameOver ,Pause};
     short unsigned currentState = MainMenu;
 
-
     while (app.isOpen())
     {
         Event e;
@@ -104,16 +108,18 @@ int main()
         switch (currentState)
         {
         case MainMenu:
+            //set everything
             sPlayButton.setPosition(82, 236);
             sQuitButton.setPosition(92, 358);
             sPlayButton.setTexture(x5);
             sQuitButton.setTexture(x6);
+
             //playbutton
             if (Keyboard::isKeyPressed(Keyboard::Enter))
             {
                 sPlayButton.setTexture(x7);
                 currentState = Game;
-                musicmenu.stop();
+                musicmenu.pause();
                 musicgame.play();
             }
             if (sPlayButton.getGlobalBounds().contains(app.mapPixelToCoords(Mouse::getPosition(app))))
@@ -122,7 +128,7 @@ int main()
                 if (Mouse::isButtonPressed(Mouse::Left))
                 {
                     currentState = Game;
-                    musicmenu.stop();
+                    musicmenu.pause();
                     musicgame.play();
                 }
             }
@@ -134,18 +140,24 @@ int main()
                     app.close();
                 }
             }
+
+            //Render
             app.draw(sBackgroundMainMenu);
             app.draw(sPlayButton);
             app.draw(sQuitButton);
-            
             break;
         case Game:
+            //set scoretext
+            scoretext.setCharacterSize(50);
+            scoretext.setPosition(15, 3);
+
             if (Keyboard::isKeyPressed(Keyboard::Right) or Keyboard::isKeyPressed(Keyboard::D)) x += 4.5;
             if (Keyboard::isKeyPressed(Keyboard::Left) or Keyboard::isKeyPressed(Keyboard::A)) x -= 4.5;
             if (Keyboard::isKeyPressed(Keyboard::Escape))
             {
                 currentState = Pause;
                 musicgame.pause();
+                musicmenu.play();
             }
             dy += 0.49;
             y += dy;
@@ -153,16 +165,12 @@ int main()
             {
                 currentState = GameOver;
                 musicgame.pause();
+                musicgameover.play();
             }
             //if charactor positoin out of window >> change to another side
-            if (x > 600)
-            {
-                x = 0;
-            }
-            if (x < (-100))
-            {
-                x = 600;
-            }
+            if (x > 600) x = 0;
+            if (x < -sChars.getGlobalBounds().width) x = 600;
+
             //jump
             for (int i = 0; i < 6; i++)
             {
@@ -188,16 +196,8 @@ int main()
                 sDog.setPosition(plat[a].getPosition().x + 10, plat[a].getPosition().y - (103 + dy));
             }
 
+            //update cat position
             sChars.setPosition(x, y);
-
-            //score
-           
-            score.setString("score : ");
-            //score.setString(itoa(sc));
-            score.setFont(font);
-            score.setCharacterSize(100);
-            score.setFillColor(Color::White);
-            score.setStyle(Text::Bold);
 
             //render
             app.draw(sBackgroundGame);
@@ -209,16 +209,21 @@ int main()
             {
                 app.draw(fish[i]);
             }
-            app.draw(sChars);
             app.draw(sDog);
-            app.draw(score);
+            app.draw(sChars);
+            app.draw(scoretext);
             break;
         case GameOver:
+            //set everything
             sgameover.setPosition(22, 78);
             sNewGameButton.setPosition(155, 549);
             sQuitGOButton.setPosition(233, 678);
             sNewGameButton.setTexture(x11);
             sQuitGOButton.setTexture(x13);
+            highscoretext.setCharacterSize(60);
+            highscoretext.setPosition(45,175);
+            scoretext.setCharacterSize(60);
+            scoretext.setPosition(45,235);
 
             //newgamebutton
             if (sNewGameButton.getGlobalBounds().contains(app.mapPixelToCoords(Mouse::getPosition(app))) || Keyboard::isKeyPressed(Keyboard::Enter))
@@ -229,6 +234,7 @@ int main()
                     currentState = Game;
                     musicgame.stop();
                     musicgame.play();
+                    musicgameover.stop();
                     //newgame set cat&plat position
                     x = 100;
                     y = 100;
@@ -246,6 +252,11 @@ int main()
                                 break;
                             }
                         }
+                        for (int i = 0; i < 10; i++)
+                        {
+                            fish[i] = sFish;
+                            fish[i].setPosition(rand() % 560, rand() % 840);
+                        }
                     }
                 }
             }
@@ -257,12 +268,17 @@ int main()
                     app.close();
                 }
             }
+
+            //Render
             app.draw(sBGgameover);
             app.draw(sgameover);
             app.draw(sNewGameButton);
             app.draw(sQuitGOButton);
+            app.draw(highscoretext);
+            app.draw(scoretext);
             break;
         case Pause:
+            //set everything
             sResumeButton.setPosition(167, 182);
             sReplayButton.setPosition(165, 303);
             sQuitButton.setPosition(177, 421);
@@ -275,6 +291,7 @@ int main()
                 sResumeButton.setTexture(x20);
                 currentState = Game;
                 musicgame.play();
+                musicmenu.pause();
             }
             if (sResumeButton.getGlobalBounds().contains(app.mapPixelToCoords(Mouse::getPosition(app))))
             {
@@ -283,6 +300,7 @@ int main()
                 {
                     currentState = Game;
                     musicgame.play();
+                    musicmenu.pause();
                 }
             }
             // replay
@@ -294,6 +312,7 @@ int main()
                     currentState = Game;
                     musicgame.stop();
                     musicgame.play();
+                    musicmenu.pause();
                     //set new cat&plat position
                     x = 100;
                     y = 100;
@@ -310,6 +329,11 @@ int main()
                                 i = 0;
                                 break;
                             }
+                            for (int i = 0; i < 10; i++)
+                            {
+                                fish[i] = sFish;
+                                fish[i].setPosition(rand() % 560, rand() % 840);
+                            }
                         }
                     }
                 }
@@ -323,18 +347,17 @@ int main()
                     app.close();
                 }
             }
+
+            //Render
             app.draw(sBackgroundPause);
             app.draw(sResumeButton);
             app.draw(sReplayButton);
             app.draw(sQuitButton);
-
             break;
         default:
             break;
         }
-
         app.display();
     }
-
     return 0;
 }
