@@ -206,7 +206,14 @@ int main()
                 }
                 sDog.setPosition(plat[a].getPosition().x + 10, plat[a].getPosition().y - (103 + dy));
             }
-
+            //if cat Colliding with fish or dog then it dissappear
+            for (int i = 0; i < 10; i++) {
+                if (sChars.getGlobalBounds().intersects(fish[i].getGlobalBounds())) {
+                    fish[i].setPosition(4000,4000);
+                    scores +=0;
+                }
+            }
+       
             //update cat position
             sChars.setPosition(x, y);
 
