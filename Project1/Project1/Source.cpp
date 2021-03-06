@@ -11,6 +11,12 @@ int main()
     RenderWindow app(VideoMode(600, 853), "Raise dumb!");
     app.setFramerateLimit(60);
 
+    int x = 100, y = 100, h = 200;
+    int scores = 0, highscore = 0;
+    float dx = 0, dy = 0;
+    enum States { MainMenu, Game, GameOver, Pause };
+    short unsigned currentState = MainMenu;
+
     //open music from file
     Music musicmenu, musicgame, musicgameover;
     musicmenu.openFromFile("sounds/lala.wav");
@@ -57,12 +63,11 @@ int main()
     //load & set font
     Font font;
     font.loadFromFile("font/Pixeboy.ttf");
-    Text scoretext, score, highscoretext;
+    Text scoretext, highscoretext;
     scoretext.setFillColor(Color::White);
     highscoretext.setFillColor(Color::White);
     scoretext.setFont(font);
     highscoretext.setFont(font);
-
 
     // random & check platform 
     for (int i = 0; i < 6; i++)
@@ -85,16 +90,10 @@ int main()
         fish[i] = sFish;
         fish[i].setPosition(rand() % 560, rand() % 840);
     }
-
     //set dog position on random platform
     int a = rand() % 6;
-    sDog.setPosition(plat[a].getPosition().x + 10, plat[a].getPosition().y - 103);
-
-    int x = 100, y = 100, h = 200;
-    int scores = 0, highscore = 0;
-    float dx = 0, dy = 0;
-    enum States { MainMenu, Game, GameOver, Pause };
-    short unsigned currentState = MainMenu;
+    sDog.setPosition(-(sDog.getGlobalBounds().width*2), sDog.getGlobalBounds().height);
+    if(scores >= 200)sDog.setPosition(plat[a].getPosition().x + 10, plat[a].getPosition().y - 103);
 
     while (app.isOpen())
     {
@@ -150,6 +149,7 @@ int main()
             //set scoretext
             scoretext.setCharacterSize(50);
             scoretext.setPosition(15, 3);
+            scoretext.setString("Score : " + std::to_string(scores));
 
             if (Keyboard::isKeyPressed(Keyboard::Right) or Keyboard::isKeyPressed(Keyboard::D)) x += 4.5;
             if (Keyboard::isKeyPressed(Keyboard::Left) or Keyboard::isKeyPressed(Keyboard::A)) x -= 4.5;
@@ -166,24 +166,12 @@ int main()
             if (x > 600) x = -70;
             if (x < -sChars.getGlobalBounds().width) x = 600;
 
-            //score
-            if (y == h)
-            {
-                scores += 1;
-                scoretext.setString("Score: " + std::to_string(scores));
-                if (scores > highscore)
-                {
-                    highscore = scores;
-                }
-            }
-
             //jump
             for (int i = 0; i < 6; i++)
             {
                 if ((x + 65 > plat[i].getPosition().x) && (x + 30 < plat[i].getPosition().x + 112) &&
                     (y + 125 > plat[i].getPosition().y) && (y + 125 < plat[i].getPosition().y + 40) && (dy > 0)) dy = -20;
             }
-
 
             //Move the platform down and set new paltform position
             if (y < h)
@@ -201,33 +189,30 @@ int main()
                     fish[i].setPosition(fish[i].getPosition().x, fish[i].getPosition().y - dy);
                     if (fish[i].getPosition().y > 853) { fish[i].setPosition(rand() % 560, -10); }
                 }
-                if (scores > 200) {
-      
-                    sDog.setPosition(plat[a].getPosition().x + 10, plat[a].getPosition().y - (103 + dy));
-                }
-                
+                if(scores >= 200) sDog.setPosition(plat[a].getPosition().x + 10, plat[a].getPosition().y - (103 + dy));
             }
+
             //if cat Colliding with fish or dog then it dissappear
             for (int i = 0; i < 10; i++) {
                 if (sChars.getGlobalBounds().intersects(fish[i].getGlobalBounds())) {
-                    fish[i].setPosition(4000, 4000);
                     scores += 5;
-                    scoretext.setString("Score: " + std::to_string(scores));
-                    if (scores > highscore)
-                    {
-                        highscore = scores;
-                    }
+                    fish[i].setPosition(rand() % 560, -sFish.getGlobalBounds().height);
                 }
             }
             if (sChars.getGlobalBounds().intersects(sDog.getGlobalBounds())) {
                 scores -= 20;
-                scoretext.setString("Score: " + std::to_string(scores));
-                sDog.setPosition(4000, 4000);
+                sDog.setPosition(-(sDog.getGlobalBounds().width * 2), sDog.getGlobalBounds().height);
+                if (scores >= 200)
+                {
+                    a = rand() % 6;
+                    sDog.setPosition(plat[a].getPosition().x + 10, plat[a].getPosition().y - 103);
+                }
             }
 
             //GameOver
             if (y > 853)
             {
+                if (scores > highscore) highscore = scores; 
                 currentState = GameOver;
                 musicgame.pause();
                 musicgameover.play();
@@ -235,12 +220,10 @@ int main()
             if (scores < 0)
             {
                 scores = 0;
-                scoretext.setString("Score: " + std::to_string(scores));
                 currentState = GameOver;
                 musicgame.pause();
                 musicgameover.play();
             }
-
 
             //update cat position
             sChars.setPosition(x, y);
@@ -255,9 +238,10 @@ int main()
             {
                 app.draw(fish[i]);
             }
-            if(scores > 200){
+            if(scores >= 200)
+            {
                 app.draw(sDog);
-             }
+            }
             app.draw(sChars);
             app.draw(scoretext);
             break;
