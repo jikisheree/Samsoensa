@@ -1,4 +1,4 @@
-#include "SFML/Graphics.hpp"
+﻿#include "SFML/Graphics.hpp"
 #include "SFML/Audio.hpp"
 #include "time.h"
 
@@ -90,7 +90,7 @@ int main()
         fish[i] = sFish;
         fish[i].setPosition(rand() % 560, rand() % 840);
     }
-    //set dog position on random platform
+    //set dog position on random platform when scores ≥ 200
     int a = rand() % 6;
     sDog.setPosition(-(sDog.getGlobalBounds().width*2), sDog.getGlobalBounds().height);
     if(scores >= 200)sDog.setPosition(plat[a].getPosition().x + 10, plat[a].getPosition().y - 103);
@@ -196,7 +196,7 @@ int main()
             for (int i = 0; i < 10; i++) {
                 if (sChars.getGlobalBounds().intersects(fish[i].getGlobalBounds())) {
                     scores += 5;
-                    fish[i].setPosition(rand() % 560, -sFish.getGlobalBounds().height);
+                    fish[i].setPosition(rand() % 560, -sFish.getGlobalBounds().height); //set new position (dissappear)
                 }
             }
             if (sChars.getGlobalBounds().intersects(sDog.getGlobalBounds())) {
@@ -212,7 +212,7 @@ int main()
             //GameOver
             if (y > 853)
             {
-                if (scores > highscore) highscore = scores; 
+                if (scores > highscore) highscore = scores; //Check the score at the end of the game.
                 currentState = GameOver;
                 musicgame.pause();
                 musicgameover.play();
