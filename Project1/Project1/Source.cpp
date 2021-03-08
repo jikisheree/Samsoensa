@@ -123,7 +123,7 @@ int main()
             sQuitButton.setTexture(x6);
 
             //playbutton
-            if (Keyboard::isKeyPressed(Keyboard::Enter))
+            if (Keyboard::isKeyPressed(Keyboard::Enter) or Keyboard::isKeyPressed(Keyboard::Space))
             {
                 sPlayButton.setTexture(x7);
                 currentState = Game;
@@ -276,10 +276,11 @@ int main()
             scoretext.setPosition(45, 235);
 
             //newgamebutton
-            if (sNewGameButton.getGlobalBounds().contains(app.mapPixelToCoords(Mouse::getPosition(app))) || Keyboard::isKeyPressed(Keyboard::Enter))
+            if (sNewGameButton.getGlobalBounds().contains(app.mapPixelToCoords(Mouse::getPosition(app))) || Keyboard::isKeyPressed(Keyboard::Enter)
+                or Keyboard::isKeyPressed(Keyboard::Space))
             {
                 sNewGameButton.setTexture(x12);
-                if (Mouse::isButtonPressed(Mouse::Left) || Keyboard::isKeyPressed(Keyboard::Enter))
+                if (Mouse::isButtonPressed(Mouse::Left) or Keyboard::isKeyPressed(Keyboard::Enter) or Keyboard::isKeyPressed(Keyboard::Space))
                 {
                     currentState = Game;
                     musicgame.stop();
@@ -345,7 +346,7 @@ int main()
                 currentState = Game;
                 musicgame.play();
                 musicmenu.pause();
-            }
+            }           
             if (sResumeButton.getGlobalBounds().contains(app.mapPixelToCoords(Mouse::getPosition(app))))
             {
                 sResumeButton.setTexture(x20);
@@ -399,6 +400,10 @@ int main()
                 {
                     app.close();
                 }
+            }
+            if (Keyboard::isKeyPressed(Keyboard::Escape))
+            {
+                app.close();
             }
 
             //Render
