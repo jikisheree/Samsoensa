@@ -123,7 +123,7 @@ int main()
             sQuitButton.setTexture(x6);
 
             //playbutton
-            if (Keyboard::isKeyPressed(Keyboard::Enter) or Keyboard::isKeyPressed(Keyboard::Space))
+            if (Keyboard::isKeyPressed(Keyboard::Enter))
             {
                 sPlayButton.setTexture(x7);
                 currentState = Game;
@@ -163,7 +163,7 @@ int main()
 
             if (Keyboard::isKeyPressed(Keyboard::Right) or Keyboard::isKeyPressed(Keyboard::D)) x += 4.5;
             if (Keyboard::isKeyPressed(Keyboard::Left) or Keyboard::isKeyPressed(Keyboard::A)) x -= 4.5;
-            if (Keyboard::isKeyPressed(Keyboard::Escape))
+            if (Keyboard::isKeyPressed(Keyboard::Escape) or Keyboard::isKeyPressed(Keyboard::Space))
             {
                 currentState = Pause;
                 musicgame.pause();
