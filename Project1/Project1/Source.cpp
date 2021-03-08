@@ -1,6 +1,7 @@
 ﻿#include "SFML/Graphics.hpp"
 #include "SFML/Audio.hpp"
 #include "time.h"
+#include <iostream>
 
 using namespace sf;
 
@@ -8,7 +9,9 @@ int main()
 {
     srand(time(0));
 
-    RenderWindow app(VideoMode(600, 853), "Raise dumb!");
+    Clock clock;
+
+    RenderWindow app(VideoMode(600, 853), "Let's Jump with Kitten!");
     app.setFramerateLimit(60);
 
     int x = 100, y = 100, h = 200;
@@ -30,7 +33,7 @@ int main()
     musicgame.setLoop(true);
     musicmenu.setLoop(true);
 
-    Texture x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x17, x18, x19, x20, x21, x22;
+    Texture x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x17, x18, x19, x20, x21, x22, x23;
     x1.loadFromFile("images/bg1.jpg");
     x2.loadFromFile("images/platform.png");
     x3.loadFromFile("images/cat.png");
@@ -53,10 +56,11 @@ int main()
     x20.loadFromFile("images/resume2.png");
     x21.loadFromFile("images/dog.png");
     x22.loadFromFile("images/fish.png");
+    x23.loadFromFile("images/blackhole.png");
 
     Sprite sBackgroundGame(x1), sPlat(x2), sChars(x3), sBackgroundMainMenu(x4), sPlayButton(x5), sQuitButton(x6),
         sBGgameover(x9), sgameover(x10), sNewGameButton(x11), sQuitGOButton(x13), sReplayButton(x17),
-        sResumeButton(x19), sBackgroundPause(x16), sDog(x21), sFish(x22);
+        sResumeButton(x19), sBackgroundPause(x16), sDog(x21), sFish(x22), sBlackhole(x23);
     Sprite plat[6];
     Sprite fish[10];
 
@@ -90,13 +94,18 @@ int main()
         fish[i] = sFish;
         fish[i].setPosition(rand() % 560, rand() % 840);
     }
-    //set dog position on random platform when scores ≥ 200
+    //set dog position on random platform when scores = 200
     int a = rand() % 6;
-    sDog.setPosition(-(sDog.getGlobalBounds().width*2), sDog.getGlobalBounds().height);
-    if(scores >= 200)sDog.setPosition(plat[a].getPosition().x + 10, plat[a].getPosition().y - 103);
+    sDog.setPosition(-(sDog.getGlobalBounds().width * 2), sDog.getGlobalBounds().height);
+    if (scores >= 200)sDog.setPosition(plat[a].getPosition().x + 10, plat[a].getPosition().y - 103);
 
     while (app.isOpen())
     {
+        float time = clock.getElapsedTime().asSeconds();
+        if (time > 3) {
+            clock.restart();
+        }
+
         Event e;
         while (app.pollEvent(e))
         {
@@ -146,6 +155,7 @@ int main()
             app.draw(sQuitButton);
             break;
         case Game:
+
             //set scoretext
             scoretext.setCharacterSize(50);
             scoretext.setPosition(15, 3);
@@ -170,8 +180,15 @@ int main()
             for (int i = 0; i < 6; i++)
             {
                 if ((x + 65 > plat[i].getPosition().x) && (x + 30 < plat[i].getPosition().x + 112) &&
-                    (y + 125 > plat[i].getPosition().y) && (y + 125 < plat[i].getPosition().y + 40) && (dy > 0)) dy = -20;
+                    (y + 125 > plat[i].getPosition().y) && (y + 125 < plat[i].getPosition().y + 40) && (dy > 0)) {
+                    dy = -20;
+                    sChars.setTexture(x15);           
+                    if (time > 1.5) {
+                        sChars.setTexture(x3);
+                    }
+                }
             }
+
 
             //Move the platform down and set new paltform position
             if (y < h)
@@ -189,7 +206,7 @@ int main()
                     fish[i].setPosition(fish[i].getPosition().x, fish[i].getPosition().y - dy);
                     if (fish[i].getPosition().y > 853) { fish[i].setPosition(rand() % 560, -10); }
                 }
-                if(scores >= 200) sDog.setPosition(plat[a].getPosition().x + 10, plat[a].getPosition().y - (103 + dy));
+                if (scores >= 200) sDog.setPosition(plat[a].getPosition().x + 10, plat[a].getPosition().y - (103 + dy));
             }
 
             //if cat Colliding with fish or dog then it dissappear
@@ -238,7 +255,7 @@ int main()
             {
                 app.draw(fish[i]);
             }
-            if(scores >= 200)
+            if (scores >= 200)
             {
                 app.draw(sDog);
             }
