@@ -23,7 +23,7 @@ int main()
 {
 	srand(time(0));
 
-	Clock clock;
+	Clock clock1, clock2;
 
 	RenderWindow app(VideoMode(600, 853), "Let's Jump with Kitten!");
 	app.setFramerateLimit(60);
@@ -70,7 +70,7 @@ int main()
 	x20.loadFromFile("images/resume2.png");
 	x21.loadFromFile("images/dog.png");
 	x22.loadFromFile("images/fish.png");
-	x23.loadFromFile("images/blackhole.png");
+	x23.loadFromFile("images/circle.png");
 
 	Sprite sBackgroundGame(x1), sPlat(x2), sChars(x3), sBackgroundMainMenu(x4), sPlayButton(x5), sQuitButton(x6),
 		sBGgameover(x9), sgameover(x10), sNewGameButton(x11), sQuitGOButton(x13), sReplayButton(x17),
@@ -117,13 +117,19 @@ int main()
 		fish[i] = sFish;
 		fish[i].setPosition(rand() % 560, rand() % 840);
 	}
+	//set blackhole
+	if (scores >= 400)
+		sBlackhole.setPosition(rand() % 500, rand() % 780);
 	
 	while (app.isOpen())
 	{
-		float time = clock.getElapsedTime().asSeconds();
-		if (time > 3) {
-			clock.restart();
+		//time condition
+		float time1 = clock1.getElapsedTime().asSeconds();
+		if (time1 > 3) {
+			clock1.restart();
 		}
+
+		int time2 = clock2.getElapsedTime().asSeconds();
 
 		Event e;
 		while (app.pollEvent(e))
@@ -175,6 +181,10 @@ int main()
 			break;
 		case Game:
 
+			//set bLackhole first position
+			if (scores < 400)
+				sBlackhole.setPosition(2000, 2000);
+
 			//set scoretext
 			scoretext.setCharacterSize(50);
 			scoretext.setPosition(15, 3);
@@ -202,7 +212,7 @@ int main()
 					(y + 125 > i.getPosition().y) && (y + 125 < i.getPosition().y + 40) && (dy > 0)) {
 					dy = -20;
 					sChars.setTexture(x15);
-					if (time > 1.5) {
+					if (time1 > 1.5) {
 						sChars.setTexture(x3);
 					}
 				}
@@ -246,6 +256,14 @@ int main()
 					}
 				}
 			}
+			if (scores >= 400 && time2 > 15) {
+				sBlackhole.setPosition(sBlackhole.getPosition().x, sBlackhole.getPosition().y - dy);
+				if (sBlackhole.getPosition().y > 853) { sBlackhole.setPosition(rand() % 500, 200); }
+				if (time2 > 20) {
+					clock2.restart();
+					sBlackhole.setPosition(1000, 1000);
+				}
+			}
 		}
 
 		//if cat Colliding with fish or dog then it dissappear
@@ -259,6 +277,12 @@ int main()
 			scores -= 20;
 			delete sDog;
 			sDog = NULL;
+		}
+		// meet blackhole >> gameover
+		if (scores >= 200) {
+			if (sChars.getGlobalBounds().intersects(sBlackhole.getGlobalBounds())) {
+				currentState = GameOver;
+			}
 		}
 
 		//GameOver
@@ -293,6 +317,10 @@ int main()
 		if (sDog)
 		{
 			app.draw(*sDog);
+		}
+		if (scores >= 400)
+		{
+			app.draw(sBlackhole);
 		}
 		app.draw(sChars);
 		app.draw(scoretext);
