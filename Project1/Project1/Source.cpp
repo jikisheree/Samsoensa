@@ -288,7 +288,6 @@ int main()
 		//GameOver
 		if (y > 853)
 		{
-			if (scores > highscore) highscore = scores; //Check the score at the end of the game.
 			currentState = GameOver;
 			musicgame.pause();
 			musicgameover.play();
@@ -326,6 +325,9 @@ int main()
 		app.draw(scoretext);
 		break;
 		case GameOver:
+
+			if (scores > highscore) highscore = scores; //Check the score at the end of the game.
+
 			//set everything
 			sgameover.setPosition(22, 78);
 			sNewGameButton.setPosition(155, 549);
