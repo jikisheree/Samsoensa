@@ -23,7 +23,7 @@ int main()
 {
 	srand(time(0));
 
-	Clock clock1, clock2, clockforsound ;
+	Clock clock1, clock2;
 
 	RenderWindow app(VideoMode(600, 853), "Let's Jump with Kitten!");
 	app.setFramerateLimit(60);
@@ -178,9 +178,7 @@ int main()
 			{
 				sQuitButton.setTexture(x8);
 				if (Mouse::isButtonPressed(Mouse::Left))
-				{
-					musicclick.stop();
-					musicclick.play(); 
+				{					
 					app.close();
 				}
 			}
@@ -399,8 +397,6 @@ int main()
 				sQuitGOButton.setTexture(x14);
 				if (Mouse::isButtonPressed(Mouse::Left))
 				{
-					musicclick.stop();
-					musicclick.play(); 
 					app.close();
 				}
 			}
@@ -486,8 +482,6 @@ int main()
 				sQuitButton.setTexture(x8);
 				if (Mouse::isButtonPressed(Mouse::Left))
 				{
-					musicclick.stop();
-					musicclick.play(); 
 					app.close();
 				}
 			}
