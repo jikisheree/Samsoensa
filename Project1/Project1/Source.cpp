@@ -157,6 +157,8 @@ int main()
 			//playbutton
 			if (Keyboard::isKeyPressed(Keyboard::Enter))
 			{
+				musicclick.stop();
+				musicclick.play(); 
 				sPlayButton.setTexture(x7);
 				currentState = Game;
 				musicmenu.pause();
