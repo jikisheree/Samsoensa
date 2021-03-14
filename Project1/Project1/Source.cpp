@@ -258,7 +258,7 @@ int main()
 			}
 			if (scores >= 400 && time2 > 15) {
 				sBlackhole.setPosition(sBlackhole.getPosition().x, sBlackhole.getPosition().y - dy);
-				if (sBlackhole.getPosition().y > 853) { sBlackhole.setPosition(rand() % 500, 200); }
+				if (sBlackhole.getPosition().y > 853) { sBlackhole.setPosition(rand() % 500, -sBlackhole.getGlobalBounds().height); }
 				if (time2 > 20) {
 					clock2.restart();
 					sBlackhole.setPosition(1000, 1000);
