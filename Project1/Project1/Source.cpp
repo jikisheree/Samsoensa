@@ -23,7 +23,7 @@ int main()
 {
 	srand(time(0));
 
-	Clock clock1, clock2;
+	Clock clock1, clock2, clockforsound ;
 
 	RenderWindow app(VideoMode(600, 853), "Let's Jump with Kitten!");
 	app.setFramerateLimit(60);
@@ -35,10 +35,15 @@ int main()
 	short unsigned currentState = MainMenu;
 
 	//open music from file
-	Music musicmenu, musicgame, musicgameover;
+	Music musicmenu, musicgame, musicgameover, musicfish, musicdog, musictouch, musicclick, musicjump;
 	musicmenu.openFromFile("sounds/bgm.wav");
 	musicgame.openFromFile("sounds/butter_building.wav");
 	musicgameover.openFromFile("sounds/gameover.wav");
+	musicfish.openFromFile("sounds/fish.wav");
+	musicdog.openFromFile("sounds/dog.wav");
+	musictouch.openFromFile("sounds/touch.wav");
+	musicclick.openFromFile("sounds/click.wav");
+	musicjump.openFromFile("sounds/jump.wav");
 	//set loop/volume.
 	musicmenu.play();
 	musicmenu.setVolume(15);
@@ -130,7 +135,7 @@ int main()
 		}
 
 		int time2 = clock2.getElapsedTime().asSeconds();
-
+				
 		Event e;
 		while (app.pollEvent(e))
 		{
@@ -267,14 +272,15 @@ int main()
 		}
 
 		//if cat Colliding with fish or dog then it dissappear
-		for (int i = 0; i < 10; i++) {
+		
+		for (int i = 0; i < 10; i++) 
 			if (sChars.getGlobalBounds().intersects(fish[i].getGlobalBounds())) {
-				scores += 5;
+				scores += 5;				
 				fish[i].setPosition(rand() % 560, -sFish.getGlobalBounds().height); //set new position (dissappear)
-			}
+			
 		}
 		if (sDog && sChars.getGlobalBounds().intersects(sDog->getGlobalBounds())) {
-			scores -= 20;
+			scores -= 20;			
 			delete sDog;
 			sDog = NULL;
 		}
