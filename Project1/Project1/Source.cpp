@@ -46,9 +46,11 @@ int main()
 	musicjump.openFromFile("sounds/jump.wav");
 	//set loop/volume.
 	musicmenu.play();
-	musicmenu.setVolume(15);
-	musicgame.setVolume(5);
-	musicgameover.setVolume(4);
+	musicmenu.setVolume(45);
+	musicgame.setVolume(15);
+	musicgameover.setVolume(12);
+	musicfish.setVolume(12);
+	musicjump.setVolume(10);
 	musicgame.setLoop(true);
 	musicmenu.setLoop(true);
 
@@ -166,6 +168,8 @@ int main()
 				if (Mouse::isButtonPressed(Mouse::Left))
 				{
 					currentState = Game;
+					musicclick.stop();
+					musicclick.play();
 					musicmenu.pause();
 					musicgame.play();
 				}
@@ -175,6 +179,8 @@ int main()
 				sQuitButton.setTexture(x8);
 				if (Mouse::isButtonPressed(Mouse::Left))
 				{
+					musicclick.stop();
+					musicclick.play(); 
 					app.close();
 				}
 			}
@@ -216,6 +222,8 @@ int main()
 				if ((x + 65 > i.getPosition().x) && (x + 30 < i.getPosition().x + 112) &&
 					(y + 125 > i.getPosition().y) && (y + 125 < i.getPosition().y + 40) && (dy > 0)) {
 					dy = -20;
+					musicjump.stop();
+					musicjump.play();
 					sChars.setTexture(x15);
 					if (time1 > 1.5) {
 						sChars.setTexture(x3);
@@ -277,10 +285,13 @@ int main()
 			if (sChars.getGlobalBounds().intersects(fish[i].getGlobalBounds())) {
 				scores += 5;				
 				fish[i].setPosition(rand() % 560, -sFish.getGlobalBounds().height); //set new position (dissappear)
-			
+				musicfish.stop();
+				musicfish.play();
 		}
 		if (sDog && sChars.getGlobalBounds().intersects(sDog->getGlobalBounds())) {
-			scores -= 20;			
+			scores -= 20;
+			musicdog.stop();
+			musicdog.play();
 			delete sDog;
 			sDog = NULL;
 		}
@@ -354,8 +365,10 @@ int main()
 				if (Mouse::isButtonPressed(Mouse::Left) or Keyboard::isKeyPressed(Keyboard::Enter) or Keyboard::isKeyPressed(Keyboard::Space))
 				{
 					currentState = Game;
+					musicclick.stop();
+					musicclick.play();
 					musicgame.stop();
-					musicgame.play();
+					musicgame.play();					
 					musicgameover.stop();
 					//newgame set cat&plat position
 					x = 100;
@@ -386,6 +399,8 @@ int main()
 				sQuitGOButton.setTexture(x14);
 				if (Mouse::isButtonPressed(Mouse::Left))
 				{
+					musicclick.stop();
+					musicclick.play(); 
 					app.close();
 				}
 			}
@@ -423,6 +438,8 @@ int main()
 				if (Mouse::isButtonPressed(Mouse::Left))
 				{
 					currentState = Game;
+					musicclick.stop();
+					musicclick.play();
 					musicgame.play();
 					musicmenu.pause();
 				}
@@ -434,6 +451,8 @@ int main()
 				if (Mouse::isButtonPressed(Mouse::Left))
 				{
 					currentState = Game;
+					musicclick.stop();
+					musicclick.play(); 
 					musicgame.stop();
 					musicgame.play();
 					musicmenu.pause();
@@ -467,6 +486,8 @@ int main()
 				sQuitButton.setTexture(x8);
 				if (Mouse::isButtonPressed(Mouse::Left))
 				{
+					musicclick.stop();
+					musicclick.play(); 
 					app.close();
 				}
 			}
