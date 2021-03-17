@@ -33,6 +33,7 @@ int main()
 	float dx = 0, dy = 0;
 	enum States { MainMenu, Game, GameOver, Pause };
 	short unsigned currentState = MainMenu;
+	bool CheckScore = false;
 
 	//open music from file
 	Music musicmenu, musicgame, musicgameover;
@@ -228,6 +229,16 @@ int main()
 			dy += 0.49;
 			y += dy;
 
+			//Check score
+			while (scores >= 200)
+			{
+				if (scores >= 200)
+				{
+					CheckScore = true;
+					break;
+				}
+			}
+
 			//set bLackhole first position
 			if (scores < 400)
 				sBlackhole.setPosition(2000, 2000);
@@ -241,7 +252,7 @@ int main()
 			{
 				if ((x + 65 > i.getPosition().x) && (x + 30 < i.getPosition().x + 112) &&
 					(y + 125 > i.getPosition().y) && (y + 125 < i.getPosition().y + 40) && (dy > 0)) {
-					dy = -20;
+					dy = -22;
 					musicjump.play();
 					sChars.setTexture(x15);
 					if (time1 > 1.5) {
@@ -281,7 +292,7 @@ int main()
 					if (checkPlat(sPlat, plats))
 					{
 						plats.push_back(sPlat);
-						if (!sDog && scores >= 200 && rand() % 5 == 0)
+						if (!sDog && CheckScore && rand() % 5 == 0)
 						{
 							sDog = new Sprite(x21);
 							sDog->setPosition(plats.back().getPosition().x + 10, plats.back().getPosition().y - 115);
@@ -373,6 +384,7 @@ int main()
 			highscoretext.setString("HIGH SCORE : " + to_string(highscore));
 			scoretext.setCharacterSize(60);
 			scoretext.setPosition(45, 235);
+			scoretext.setString("Score : " + to_string(scores));
 
 			//newgamebutton
 			if (sNewGameButton.getGlobalBounds().contains(app.mapPixelToCoords(Mouse::getPosition(app))) || Keyboard::isKeyPressed(Keyboard::Enter)
@@ -381,7 +393,9 @@ int main()
 				sNewGameButton.setTexture(x12);
 				if (Mouse::isButtonPressed(Mouse::Left) or Keyboard::isKeyPressed(Keyboard::Enter) or Keyboard::isKeyPressed(Keyboard::Space))
 				{
+					scores = 0;
 					currentState = Game;
+					CheckScore = false;
 					musicclick.play();
 					musicgame.stop();
 					musicgame.play();
@@ -418,9 +432,6 @@ int main()
 					app.close();
 				}
 			}
-
-			//set scores 
-			scores = 0;
 
 			//Render
 			app.draw(sBGgameover);
@@ -465,6 +476,7 @@ int main()
 				if (Mouse::isButtonPressed(Mouse::Left))
 				{
 					currentState = Game;
+					CheckScore = false;
 					scores = 0;
 					musicclick.play();
 					musicgame.stop();
@@ -503,7 +515,6 @@ int main()
 					app.close();
 				}
 			}
-
 			//Render
 			app.draw(sBackgroundPause);
 			app.draw(sResumeButton);
