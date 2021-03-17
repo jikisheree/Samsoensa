@@ -58,7 +58,7 @@ int main()
 	musicgame.setVolume(7);
 	musicgameover.setVolume(12);
 	musicfish.setVolume(9);
-	musicjump.setVolume(20);
+	musicjump.setVolume(15);
 	musicdog.setVolume(50);
 	musicmouse.setVolume(15);
 	musicclick.setVolume(800);
@@ -88,7 +88,7 @@ int main()
 	x20.loadFromFile("images/resume2.png");
 	x21.loadFromFile("images/dog.png");
 	x22.loadFromFile("images/fish.png");
-	x23.loadFromFile("images/circle.png");
+	x23.loadFromFile("images/blackhole.png");
 	x24.loadFromFile("images/pause.png");
 	x25.loadFromFile("images/pause2.png");
 	x26.loadFromFile("images/mouse.png");
@@ -139,12 +139,8 @@ int main()
 		fish[i] = sFish;
 		fish[i].setPosition(rand() % 560, rand() % 840);
 	}
-	//set blackhole
-	if (scores >= 400)
-		sBlackhole.setPosition(rand() % 500, rand() % 780);
-	//set mouse
-	if (scores > 50)
-		sMouse.setPosition(rand() % 500, rand() % 780);
+	
+	sBlackhole.setOrigin(sBlackhole.getGlobalBounds().width / 2.f, sBlackhole.getGlobalBounds().height / 2.f); //Sets blackhole's center of rotation.
 
 	while (app.isOpen())
 	{
@@ -239,7 +235,7 @@ int main()
 			dy += 0.49;
 			y += dy;
 
-			//Check score
+			//Check scores for dog 
 			while (scores >= 200)
 			{
 				if (scores >= 200)
@@ -255,6 +251,7 @@ int main()
 			if (scores < 200)
 				sMouse.setPosition(2000, 2000);
 
+			sBlackhole.setRotation(sBlackhole.getRotation()+2.f); //Set the blackhole to spin
 
 			//if charactor positoin out of window >> change to another side
 			if (x > 600) x = -70;
@@ -347,7 +344,7 @@ int main()
 			}
 			//colliding with mouse
 			if (sChars.getGlobalBounds().intersects(sMouse.getGlobalBounds())) {
-				scores += 30;
+				scores += 200;
 				musicmouse.play();
 				sMouse.setPosition(2000, 2000);
 				dy = -50;
