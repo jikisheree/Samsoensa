@@ -33,15 +33,17 @@ int main()
 	float dx = 0, dy = 0;
 	enum States { MainMenu, Game, GameOver, Pause };
 	short unsigned currentState = MainMenu;
+	bool CheckScore = false;
 
 	//open music from file
 	Music musicmenu, musicgame, musicgameover;
-	SoundBuffer bufferFish, bufferDog, bufferClick, bufferJump;
+	SoundBuffer bufferFish, bufferDog, bufferClick, bufferJump, bufferMouse;
 	bufferFish.loadFromFile("sounds/fish.wav");
 	bufferDog.loadFromFile("sounds/dog.wav");
 	bufferClick.loadFromFile("sounds/click.wav");
 	bufferJump.loadFromFile("sounds/jump.wav");
-	Sound musicfish, musicdog, musicclick, musicjump;
+	bufferMouse.loadFromFile("sounds/mouse.wav");
+	Sound musicfish, musicdog, musicclick, musicjump, musicmouse;
 	musicmenu.openFromFile("sounds/bgm.wav");
 	musicgame.openFromFile("sounds/butter_building.wav");
 	musicgameover.openFromFile("sounds/gameover.wav");
@@ -49,14 +51,16 @@ int main()
 	musicdog.setBuffer(bufferDog);
 	musicclick.setBuffer(bufferClick);
 	musicjump.setBuffer(bufferJump);
+	musicmouse.setBuffer(bufferMouse);
 	//set loop/volume.
 	musicmenu.play();
 	musicmenu.setVolume(15);
 	musicgame.setVolume(7);
 	musicgameover.setVolume(12);
 	musicfish.setVolume(9);
-	musicjump.setVolume(7);
+	musicjump.setVolume(20);
 	musicdog.setVolume(50);
+	musicmouse.setVolume(15);
 	musicclick.setVolume(800);
 	musicgame.setLoop(true);
 	musicmenu.setLoop(true);
@@ -139,7 +143,7 @@ int main()
 	if (scores >= 400)
 		sBlackhole.setPosition(rand() % 500, rand() % 780);
 	//set mouse
-	if (scores >= 250)
+	if (scores > 50)
 		sMouse.setPosition(rand() % 500, rand() % 780);
 
 	while (app.isOpen())
@@ -235,6 +239,16 @@ int main()
 			dy += 0.49;
 			y += dy;
 
+			//Check score
+			while (scores >= 200)
+			{
+				if (scores >= 200)
+				{
+					CheckScore = true;
+					break;
+				}
+			}
+
 			//set bLackhole and mouse first position
 			if (scores < 400)
 				sBlackhole.setPosition(2000, 2000);
@@ -251,13 +265,12 @@ int main()
 			{
 				if ((x + 65 > i.getPosition().x) && (x + 30 < i.getPosition().x + 112) &&
 					(y + 125 > i.getPosition().y) && (y + 125 < i.getPosition().y + 40) && (dy > 0)) {
-					dy = -20;
-				}
-
-				musicjump.play();
-				sChars.setTexture(x15);
-				if (time1 > 1.5) {
-					sChars.setTexture(x3);
+					dy = -22;
+					musicjump.play();
+					sChars.setTexture(x15);
+					if (time1 > 1.5) {
+						sChars.setTexture(x3);
+					}
 				}
 			}
 
@@ -292,7 +305,7 @@ int main()
 					if (checkPlat(sPlat, plats))
 					{
 						plats.push_back(sPlat);
-						if (!sDog && scores > 200 && rand() % 5 == 0)
+						if (!sDog && CheckScore && rand() % 5 == 0)
 						{
 							sDog = new Sprite(x21);
 							sDog->setPosition(plats.back().getPosition().x + 10, plats.back().getPosition().y - 115);
@@ -309,7 +322,7 @@ int main()
 					}
 				}
 				//mouse position
-				if (scores > 200 && time3 > 25) {
+				if (scores > 50 && time3 > 25) {
 					sMouse.setPosition(sMouse.getPosition().x, sMouse.getPosition().y - dy);
 					if (sMouse.getPosition().y > 853) { sMouse.setPosition(rand() % 500, -sMouse.getGlobalBounds().height); }
 					if (time3 > 28) {
@@ -334,8 +347,8 @@ int main()
 			}
 			//colliding with mouse
 			if (sChars.getGlobalBounds().intersects(sMouse.getGlobalBounds())) {
-				scores += 50;
-				musicfish.play();
+				scores += 30;
+				musicmouse.play();
 				sMouse.setPosition(2000, 2000);
 				dy = -50;
 			}
@@ -385,7 +398,7 @@ int main()
 			{
 				app.draw(sBlackhole);
 			}
-			if (scores > 200)
+			if (scores > 50)
 			{
 				app.draw(sMouse);
 			}
@@ -406,6 +419,7 @@ int main()
 			highscoretext.setString("HIGH SCORE : " + to_string(highscore));
 			scoretext.setCharacterSize(60);
 			scoretext.setPosition(45, 235);
+			scoretext.setString("Score : " + to_string(scores));
 
 			//newgamebutton
 			if (sNewGameButton.getGlobalBounds().contains(app.mapPixelToCoords(Mouse::getPosition(app))) || Keyboard::isKeyPressed(Keyboard::Enter)
@@ -414,7 +428,9 @@ int main()
 				sNewGameButton.setTexture(x12);
 				if (Mouse::isButtonPressed(Mouse::Left) or Keyboard::isKeyPressed(Keyboard::Enter) or Keyboard::isKeyPressed(Keyboard::Space))
 				{
+					scores = 0;
 					currentState = Game;
+					CheckScore = false;
 					musicclick.play();
 					musicgame.stop();
 					musicgame.play();
@@ -451,9 +467,6 @@ int main()
 					app.close();
 				}
 			}
-
-			//set scores 
-			scores = 0;
 
 			//Render
 			app.draw(sBGgameover);
