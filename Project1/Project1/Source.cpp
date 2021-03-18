@@ -93,6 +93,10 @@ int main()
 	x25.loadFromFile("images/pause2.png");
 	x26.loadFromFile("images/mouse.png");
 
+	Image icon;
+	icon.loadFromFile("images/cat2.png");
+	app.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+
 	Sprite sBackgroundGame(x1), sPlat(x2), sChars(x3), sBackgroundMainMenu(x4), sPlayButton(x5), sQuitButton(x6),
 		sBGgameover(x9), sgameover(x10), sNewGameButton(x11), sQuitGOButton(x13), sReplayButton(x17),
 		sResumeButton(x19), sBackgroundPause(x16), sFish(x22), sBlackhole(x23), sPauseButton(x24), sMouse(x26);
